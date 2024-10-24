@@ -1,17 +1,17 @@
 const { Router } = require("express");
 const router = Router();
 const { addProduct, getAllProduct, deleteProduct, updateProduct } = require("../controllers/crud.control");
-const Stripe = require('stripe'); // Импортируем Stripe
-const stripe = Stripe('your-stripe-secret-key'); // Добавь сюда свой секретный ключ от Stripe
+const Stripe = require('stripe'); // Stripe'ni import qilamiz
+const stripe = Stripe('your-stripe-secret-key'); // Bu yerga o'z Stripe maxfiy kalitingizni qo'shing
 
-// Маршруты для CRUD операций
+// CRUD operatsiyalari uchun marshrutlar
 router.post("/add", addProduct);
 router.get("/getall", getAllProduct);
-router.delete("/delete/:id", deleteProduct); // Маршрут для удаления продукта
-router.put("/update/:id", updateProduct); // Маршрут для обновления продукта
+router.delete("/delete/:id", deleteProduct); // Mahsulotni o'chirish uchun marshrut
+router.put("/update/:id", updateProduct); // Mahsulotni yangilash uchun marshrut
 
-// Обработчик для создания платежа
-router.post('/payment', async (req, res) => { // /api убери, так как это уже в use("/api")
+// To'lov yaratish uchun handler
+router.post('/payment', async (req, res) => { // /api ni olib tashlang, chunki bu allaqachon use("/api") ichida
      const { amount, currency, token } = req.body;
 
      try {
