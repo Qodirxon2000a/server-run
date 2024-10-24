@@ -7,7 +7,7 @@ const addProduct = async (req, res) => {
           await newProduct.save();
           res.status(201).json(newProduct)
      } catch (error) {
-          res.status(500).json({ message: "Ошибка при добавлении продукта", error })
+          res.status(500).json({ message: "Mahsulotni qo'shishda xatolik", error })
      }
 }
 
@@ -16,21 +16,20 @@ const getAllProduct = async (req, res) => {
           const products = await CrudSchema.find()
           res.status(200).json(products)
      } catch (error) {
-          res.status(500).json({ message: "Ошибка при получении продуктов", error })
+          res.status(500).json({ message: "Mahsulotlarni olishda xatolik", error })
      }
 }
-
 
 const deleteProduct = async (req, res) => {
      try {
           const { id } = req.params;
           const deletedProduct = await CrudSchema.findByIdAndDelete(id);
           if (!deletedProduct) {
-               return res.status(404).json({ message: "Продукт не найден" });
+               return res.status(404).json({ message: "Mahsulot topilmadi" });
           }
-          res.status(200).json({ message: "Продукт успешно удален" });
+          res.status(200).json({ message: "Mahsulot muvaffaqiyatli o'chirildi" });
      } catch (error) {
-          res.status(500).json({ message: "Ошибка при удалении продукта", error });
+          res.status(500).json({ message: "Mahsulotni o'chirishda xatolik", error });
      }
 };
 
@@ -42,19 +41,17 @@ const updateProduct = async (req, res) => {
           const updatedProduct = await CrudSchema.findByIdAndUpdate(
                id,
                { rasm, nomi, soni, narxi },
-               { new: true } // Вернуть обновленный документ
+               { new: true } // Yangilangan hujjatni qaytarish
           );
 
           if (!updatedProduct) {
-               return res.status(404).json({ message: "Продукт не найден" });
+               return res.status(404).json({ message: "Mahsulot topilmadi" });
           }
 
           res.status(200).json(updatedProduct);
      } catch (error) {
-          res.status(500).json({ message: "Ошибка при обновлении продукта", error });
+          res.status(500).json({ message: "Mahsulotni yangilashda xatolik", error });
      }
 };
-
-
 
 module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct }
