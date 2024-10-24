@@ -1,22 +1,24 @@
 const { Schema, model } = require("mongoose");
 
+// Define the Ring schema
 const RingSchema = new Schema({
-     rasm: {
-          type: String,
-          required: true,
-     },
-     nomi: {
-          type: String,
-          required: true,
-     },
-     soni: {
-          type: Number, // Измените на Number
-          required: true,
-     },
-     narxi: {
-          type: Number, // Измените на Number
-          required: true,
-     },
+  rasm: {
+    type: String,
+    required: true,
+  },
+  nomi: {
+    type: String,
+    required: true,
+  },
+  soni: {
+    type: Number, // Quantity of the ring
+    required: true,
+  },
+  narxi: {
+    type: Number, // Price of the ring
+    required: true,
+  },
 });
 
-module.exports = model("RingSchema", RingSchema); // Убедитесь, что нет пробела в названии модели
+// Create and export the Ring model
+module.exports = model("Ring", RingSchema);
