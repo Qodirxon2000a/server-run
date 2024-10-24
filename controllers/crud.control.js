@@ -22,16 +22,17 @@ const getAllProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
      try {
-          const { id } = req.params;
-          const deletedProduct = await CrudSchema.findByIdAndDelete(id);
-          if (!deletedProduct) {
-               return res.status(404).json({ message: "Mahsulot topilmadi" });
-          }
-          res.status(200).json({ message: "Mahsulot muvaffaqiyatli o'chirildi" });
+       const { id } = req.params; // O'chirilishi kerak bo'lgan mahsulot ID-sini olish
+       const deletedProduct = await CrudSchema.findByIdAndDelete(id); // Mahsulotni o'chirish
+       if (!deletedProduct) {
+         return res.status(404).json({ message: "Mahsulot topilmadi" }); // Agar mahsulot topilmasa, 404 xatosi
+       }
+       res.status(200).json({ message: "Mahsulot muvaffaqiyatli o'chirildi" }); // Mahsulot muvaffaqiyatli o'chirilsa, javob berish
      } catch (error) {
-          res.status(500).json({ message: "Mahsulotni o'chirishda xatolik", error });
+       res.status(500).json({ message: "Mahsulotni o'chirishda xatolik", error }); // Xato haqida javob berish
      }
-};
+   };
+   
 
 const updateProduct = async (req, res) => {
      try {
