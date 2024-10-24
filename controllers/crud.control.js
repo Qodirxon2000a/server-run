@@ -41,7 +41,7 @@ const updateProduct = async (req, res) => {
           const updatedProduct = await CrudSchema.findByIdAndUpdate(
                id,
                { rasm, nomi, soni, narxi },
-               { new: true } // Yangilangan hujjatni qaytarish
+               { new: true } 
           );
 
           if (!updatedProduct) {
