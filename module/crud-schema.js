@@ -1,6 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const RingSchema = new Schema({
+     category: {
+          type: String,
+          required: true,
+     },
      rasm: {
           type: String,
           required: true,
