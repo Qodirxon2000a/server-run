@@ -1,68 +1,60 @@
-// CRUD operatsiyalari
-const products = []; // Mahsulotlarni saqlash uchun vaqtincha massiv
+const CrudSchema = require('../module/crud-schema')
 
-// Yangi mahsulot qo'shish
 const addProduct = async (req, res) => {
-    try {
-        const { name, category, price } = req.body;
-        const avatarUrl = req.file ? `/uploads/${req.file.filename}` : ''; // Avatarni qo'lga olish
+     try {
+          // const { rasm, nomi, soni, narxi } = req.body
+          const newProduct = await new CrudSchema(req.body)
+          await newProduct.save();
+          res.status(201).json(newProduct)
+     } catch (error) {
+          res.status(500).json({ message: "Ошибка при добавлении продукта", error })
+     }
+}
 
-        const newProduct = { name, category, price, avatar: avatarUrl }; // Yangi mahsulot yaratish
-        products.push(newProduct); // Mahsulotlarni massivga qo'shish
-        res.status(201).json(newProduct);
-    } catch (error) {
-        res.status(500).json({ message: "Mahsulot qo'shishda xato", error });
-    }
-};
-
-// Barcha mahsulotlarni olish
 const getAllProduct = async (req, res) => {
-    try {
-        res.status(200).json(products); // Mahsulotlarni qaytarish
-    } catch (error) {
-        res.status(500).json({ message: "Mahsulotlarni olishda xato", error });
-    }
-};
+     try {
+          const products = await CrudSchema.find()
+          res.status(200).json(products)
+     } catch (error) {
+          res.status(500).json({ message: "Ошибка при получении продуктов", error })
+     }
+}
 
-// Mahsulotni o'chirish
+
 const deleteProduct = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const index = products.findIndex(product => product.id === id); // Mahsulotni topish
-
-        if (index === -1) {
-            return res.status(404).json({ message: "Mahsulot topilmadi" });
-        }
-        products.splice(index, 1); // Mahsulotni o'chirish
-        res.status(200).json({ message: "Mahsulot muvaffaqiyatli o'chirildi" });
-    } catch (error) {
-        res.status(500).json({ message: "Mahsulotni o'chirishda xato", error });
-    }
+     try {
+          const { id } = req.params;
+          const deletedProduct = await CrudSchema.findByIdAndDelete(id);
+          if (!deletedProduct) {
+               return res.status(404).json({ message: "Продукт не найден" });
+          }
+          res.status(200).json({ message: "Продукт успешно удален" });
+     } catch (error) {
+          res.status(500).json({ message: "Ошибка при удалении продукта", error });
+     }
 };
 
-// Mahsulotni yangilash
 const updateProduct = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { name, category, price } = req.body;
-        const avatarUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+     try {
+          const { id } = req.params;
+          const { rasm, nomi, soni, narxi } = req.body;
 
-        const product = products.find(p => p.id === id); // Mahsulotni topish
+          const updatedProduct = await CrudSchema.findByIdAndUpdate(
+               id,
+               { rasm, nomi, soni, narxi },
+               { new: true } // Вернуть обновленный документ
+          );
 
-        if (!product) {
-            return res.status(404).json({ message: "Mahsulot topilmadi" });
-        }
+          if (!updatedProduct) {
+               return res.status(404).json({ message: "Продукт не найден" });
+          }
 
-        // Mahsulotni yangilash
-        product.name = name || product.name;
-        product.category = category || product.category;
-        product.price = price || product.price;
-        product.avatar = avatarUrl || product.avatar;
-
-        res.status(200).json(product);
-    } catch (error) {
-        res.status(500).json({ message: "Mahsulotni yangilashda xato", error });
-    }
+          res.status(200).json(updatedProduct);
+     } catch (error) {
+          res.status(500).json({ message: "Ошибка при обновлении продукта", error });
+     }
 };
 
-module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct };
+
+
+module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct }
